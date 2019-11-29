@@ -15,7 +15,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_actionTimer_triggered();
+
+    void on_actionAlarm_Clock_triggered();
+
 private:
     Ui::MainWindow *ui;
+
 };
 #endif // MAINWINDOW_H
