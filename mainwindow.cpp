@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->container->setEnabled(false); // true also when changed
 //    connect(this,&MainWindow::new_element_created,[=](){
 //    qDebug()<<"signal is working";
 //    if()
@@ -23,17 +24,25 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionTimer_triggered()
 {
-    SetingTimerWindow * creation_window= new SetingTimerWindow;
-    creation_window->show();
+    // set is active ;
+    // normal color ;
+    ui->container->setEnabled(true);
+    ui->Creation_of_type->setText("Timer");
+    ui->TimeSelection->setTime(QTime(0,0));
 
-    bool is_timer= true;
-    creation_window->ready_to_create_element(is_timer);
 }
 
 void MainWindow::on_actionAlarm_Clock_triggered()
 {
-    SetingTimerWindow * creation_window= new SetingTimerWindow;
-    creation_window->show();
-    bool is_timer= false;
-    creation_window->ready_to_create_element(is_timer);
+    ui->container->setEnabled(true);
+    ui->Creation_of_type->setText("Alarm");
+    ui->TimeSelection->setTime(QTime::currentTime());
+}
+
+void MainWindow::on_confirm_button_clicked()
+{
+     // give all the information to the vector of timers, push to the list if wasn't changed
+    ui->Creation_of_type->setText(":')");
+    ui->TimeSelection->setTime(QTime(0,0));
+    ui->container->setEnabled(false);
 }

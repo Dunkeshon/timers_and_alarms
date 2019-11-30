@@ -24,6 +24,8 @@ private slots:
 
     void on_actionAlarm_Clock_triggered();
 
+    void on_confirm_button_clicked();
+
 private:
     Ui::MainWindow *ui;
 
