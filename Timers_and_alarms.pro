@@ -18,11 +18,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    setingtimerwindow.cpp
+    setingtimerwindow.cpp \
+    timer_alarm_element.cpp
 
 HEADERS += \
     mainwindow.h \
-    setingtimerwindow.h
+    setingtimerwindow.h \
+    timer_alarm_element.h
 
 FORMS += \
     mainwindow.ui \

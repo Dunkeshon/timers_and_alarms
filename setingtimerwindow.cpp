@@ -2,6 +2,7 @@
 #include "ui_setingtimerwindow.h"
 #include <QTimer>
 #include <QTime>
+#include "mainwindow.h"
 SetingTimerWindow::SetingTimerWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SetingTimerWindow)
@@ -23,4 +24,13 @@ void SetingTimerWindow::ready_to_create_element(bool is_timer)
 SetingTimerWindow::~SetingTimerWindow()
 {
     delete ui;
+}
+
+
+
+void SetingTimerWindow::on_confirm_button_clicked()
+{
+    QWidget *ParentWidget = parentWidget();
+    //emmit(ParentWidget->new_element_created());
+    this->hide();
 }

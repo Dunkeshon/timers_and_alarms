@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "timer_alarm_element.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -13,7 +14,10 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    std::vector<timer_alarm_element*> My_timers_and_alarms;
     ~MainWindow();
+signals:
+    void new_element_created();
 
 private slots:
     void on_actionTimer_triggered();

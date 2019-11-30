@@ -17,6 +17,10 @@ public:
     void ready_to_create_element(bool is_timer);
     ~SetingTimerWindow();
 
+private slots:
+
+    void on_confirm_button_clicked();
+
 private:
     Ui::SetingTimerWindow *ui;
 };
