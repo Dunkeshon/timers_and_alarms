@@ -1,5 +1,5 @@
 QT       += core gui
-
+QT += multimedia
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -18,17 +18,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    setingtimerwindow.cpp \
     timer_alarm_element.cpp
 
 HEADERS += \
     mainwindow.h \
-    setingtimerwindow.h \
     timer_alarm_element.h
 
 FORMS += \
-    mainwindow.ui \
-    setingtimerwindow.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

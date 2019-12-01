@@ -4,4 +4,7 @@
         <file>images/timer.png</file>
         <file>images/alarm_icon.png</file>
     </qresource>
+    <qresource prefix="/sounds">
+        <file>music/WAKE_ME_UP.mp3</file>
+    </qresource>
 </RCC>

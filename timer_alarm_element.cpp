@@ -7,10 +7,10 @@ timer_alarm_element::timer_alarm_element(int time,bool is_timer,QString Audio_pa
     this->audio_path=Audio_path;
     this->is_active = false;
     if(is_timer){
-        this->media_path =":/images/timer.png";
+        this->icon_path =":/images/timer.png";
     }
     else{
-        this->media_path = ":/images/alarm_icon.png";
+        this->icon_path = ":/images/alarm_icon.png";
     }
 
 }

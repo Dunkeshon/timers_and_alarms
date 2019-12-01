@@ -11,7 +11,7 @@ public:
     int time_in_miliseconds;
     bool is_timer;
     QString audio_path;
-    QString media_path;
+    QString icon_path;
     bool is_active;
 };
 
