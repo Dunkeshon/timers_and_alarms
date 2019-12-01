@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QDebug>
 #include <QMediaPlayer>
+#include <QMessageBox>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -60,14 +61,21 @@ void MainWindow::adding_to_list()
 {
     bool _tmp_is_timer;
     if(ui->Creation_of_type->text()=="Timer"){
+        if(ui->TimeSelection->time().msecsSinceStartOfDay()==0){
+            QMessageBox::warning(this,"no time setted","You didn't set time.Try again");
+            return;
+        }
         _tmp_is_timer = true;
     }
     else{
         _tmp_is_timer = false;
     }
     //add to vector
+
     time_element.push_back(timer_alarm_element(ui->TimeSelection->time().msecsSinceStartOfDay(),_tmp_is_timer,":/sounds/music/WAKE_ME_UP.mp3"));
     QListWidgetItem * item = new QListWidgetItem(QIcon(time_element.back().icon_path),QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds).toString("hh:mm:ss"));
+    QFont newFont("Courier", 24, QFont::Bold, false);
+    item->setFont(newFont);
     //item->setTextColor("black");
     ui->listWidget->addItem(item);
 }

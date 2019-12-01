@@ -3,6 +3,8 @@
         <file>images/sound_icon.png</file>
         <file>images/timer.png</file>
         <file>images/alarm_icon.png</file>
+        <file>images/alarm_icon_blue.png</file>
+        <file>images/timer_icon_blue.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>music/WAKE_ME_UP.mp3</file>
