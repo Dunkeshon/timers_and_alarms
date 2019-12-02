@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QMediaPlayer>
 #include <QMessageBox>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -56,7 +57,19 @@ void MainWindow::on_confirm_button_clicked()
 
 void MainWindow::countdown()
 {
+    QTimer *timer = new QTimer(this);
+    timer_alarm_element *element = &time_element[ui->listWidget->currentRow()];
+    element->Set_is_active(true);
+     timer->singleShot( element->time_in_miliseconds(), this ,[=](){
+        QString messages[3]{"Your time is over )","Time is out", "Time is up"};
+        int random_message =qrand()%3 ;
+        QMessageBox ::warning(this,messages[random_message],
+                              "<p align=center> "+ messages[random_message] + "<p>"
+                               "<br> Press OK to continue" ,QMessageBox::Ok);
+        element->Set_is_active(false);
 
+    });
+    timer->start(element->time_in_miliseconds());
 }
 
 /*
@@ -79,8 +92,8 @@ void MainWindow::adding_to_list()
 
     time_element.push_back(timer_alarm_element(ui->TimeSelection->time().msecsSinceStartOfDay(),_tmp_is_timer,":/sounds/music/WAKE_ME_UP.mp3"));
 
-    QListWidgetItem * item = new QListWidgetItem(QIcon(time_element.back().icon_path),
-                                                 QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds).toString("hh:mm:ss"));
+    QListWidgetItem * item = new QListWidgetItem(QIcon(time_element.back().icon_path()),
+                                                 QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds()).toString("hh:mm:ss"));
     ui->listWidget->setIconSize(QSize(24, 24));
     QFont newFont("Courier", 24, QFont::Bold, false);
     item->setFont(newFont);
@@ -107,10 +120,21 @@ void MainWindow::on_pushButton_2_clicked()
 
 }
 
+void MainWindow::on_startbutton_pressed()
+{
+    if(time_element[ui->listWidget->currentRow()].is_active()==false){
+        emit(start_countdown());
+    }
+}
+
 /*
  * starting timer/alarm
  */
-void MainWindow::on_startbutton_clicked()
-{
-    //choosen element -> start (emit signal start timer )
-}
+
+//void MainWindow::on_startbutton_clicked()
+//{
+//    if(time_element[ui->listWidget->currentRow()].is_active()==false){
+//        emit(start_countdown());
+//    }
+//    //choosen element -> start (emit signal start timer )
+//}
