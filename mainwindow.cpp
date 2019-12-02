@@ -54,22 +54,38 @@ void MainWindow::on_confirm_button_clicked()
     ui->TimeSelection->setTime(QTime(0,0));
     ui->container->setEnabled(false);
 }
-
+/*
+ * brief Starts countdown of timer or an alarm
+ * details If it is an alarm clock - countdown miliseconds of alarm - miliseconds of current time
+ */
 void MainWindow::countdown()
 {
+    int time_to_count;
+    QString message;
     QTimer *timer = new QTimer(this);
     timer_alarm_element *element = &time_element[ui->listWidget->currentRow()];
+    if(element->is_timer()){ // if timer
+        time_to_count=element->time_in_miliseconds();
+        message = "Timer is over";
+        ui->listWidget->currentItem()->setBackgroundColor("red");
+    }
+    else{ // if alarm
+        QTime current_time= QTime::currentTime();
+        time_to_count = element->time_in_miliseconds() - current_time.msecsSinceStartOfDay() ;
+        message ="Alarm is over";
+        ui->listWidget->currentItem()->setBackgroundColor("grey");
+    }
     element->Set_is_active(true);
-     timer->singleShot( element->time_in_miliseconds(), this ,[=](){
-        QString messages[3]{"Your time is over )","Time is out", "Time is up"};
-        int random_message =qrand()%3 ;
-        QMessageBox ::warning(this,messages[random_message],
-                              "<p align=center> "+ messages[random_message] + "<p>"
+     timer->singleShot( time_to_count, this ,[=](){
+        QString messages[2]{"Timer is over","Alarm is over"};
+        QMessageBox ::warning(this,message,
+                              "<p align=center> "+ message + "<p>"
                                "<br> Press OK to continue" ,QMessageBox::Ok);
         element->Set_is_active(false);
 
+
     });
-    timer->start(element->time_in_miliseconds());
+    timer->start(time_to_count);
 }
 
 /*
