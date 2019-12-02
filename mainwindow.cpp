@@ -13,10 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->container->setEnabled(false); // true also when changed
     changed = false;
     connect(this,&MainWindow::new_element_created,this,&MainWindow::adding_to_list);
-//    connect(this,&MainWindow::new_element_created,[=](){
-//    qDebug()<<"signal is working";
-//    if()
-//    });
+    connect(this,&MainWindow::start_countdown,this,&MainWindow::countdown);
 }
 
 MainWindow::~MainWindow()
@@ -57,6 +54,14 @@ void MainWindow::on_confirm_button_clicked()
     ui->container->setEnabled(false);
 }
 
+void MainWindow::countdown()
+{
+
+}
+
+/*
+ * signal Adding to the list
+ */
 void MainWindow::adding_to_list()
 {
     bool _tmp_is_timer;
@@ -73,9 +78,39 @@ void MainWindow::adding_to_list()
     //add to vector
 
     time_element.push_back(timer_alarm_element(ui->TimeSelection->time().msecsSinceStartOfDay(),_tmp_is_timer,":/sounds/music/WAKE_ME_UP.mp3"));
-    QListWidgetItem * item = new QListWidgetItem(QIcon(time_element.back().icon_path),QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds).toString("hh:mm:ss"));
+
+    QListWidgetItem * item = new QListWidgetItem(QIcon(time_element.back().icon_path),
+                                                 QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds).toString("hh:mm:ss"));
+    ui->listWidget->setIconSize(QSize(24, 24));
     QFont newFont("Courier", 24, QFont::Bold, false);
     item->setFont(newFont);
     //item->setTextColor("black");
     ui->listWidget->addItem(item);
+}
+
+/*
+ * deleting from listwidget and from vector
+ * PLANS : maybe it's a good idea to have dialog window
+ * that asks if i want to delete for sure
+ */
+void MainWindow::on_pushButton_2_clicked()
+{
+    int _el_to_delete = ui->listWidget->currentRow();
+    time_element.erase(time_element.begin()+_el_to_delete);
+    ui->listWidget->takeItem(ui->listWidget->currentRow());
+
+    //DEBUG
+//    for (const auto &i : time_element) {
+//            qDebug() << QTime(0,0,0).addMSecs(i.time_in_miliseconds).toString("hh:mm:ss");
+//            qDebug() << " timer left ";
+//    }
+
+}
+
+/*
+ * starting timer/alarm
+ */
+void MainWindow::on_startbutton_clicked()
+{
+    //choosen element -> start (emit signal start timer )
 }

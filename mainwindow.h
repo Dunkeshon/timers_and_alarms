@@ -14,19 +14,27 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    std::vector<timer_alarm_element*> My_timers_and_alarms;
     ~MainWindow();
 signals:
-    void new_element_created(); // created
+    void new_element_created(); // created in edit window
+    void start_countdown(); // pressed on start button
 
 private slots:
+
     void on_actionTimer_triggered(); // add timer
 
     void on_actionAlarm_Clock_triggered(); // add alarm
 
     void on_confirm_button_clicked(); // confirm adding
 
+    void countdown(); //starting countdown of a timer
+
     void adding_to_list();// create timer/alarm,add it to vector of timers and add it to ui list
+
+    void on_pushButton_2_clicked();
+
+    void on_startbutton_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::vector<timer_alarm_element> time_element;  // stores info about timer/alarm
