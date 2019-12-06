@@ -64,28 +64,46 @@ void MainWindow::countdown()
     QString message;
     QTimer *timer = new QTimer(this);
     timer_alarm_element *element = &time_element[ui->listWidget->currentRow()];
+    element->Set_is_active(true);
     if(element->is_timer()){ // if timer
         time_to_count=element->time_in_miliseconds();
         message = "Timer is over";
-        ui->listWidget->currentItem()->setBackgroundColor("red");
+        //ui->listWidget->currentItem()->setBackgroundColor("red");
+
     }
     else{ // if alarm
         QTime current_time= QTime::currentTime();
         time_to_count = element->time_in_miliseconds() - current_time.msecsSinceStartOfDay() ;
         message ="Alarm is over";
-        ui->listWidget->currentItem()->setBackgroundColor("grey");
+        //ui->listWidget->currentItem()->setBackgroundColor("grey");
     }
-    element->Set_is_active(true);
+
      timer->singleShot( time_to_count, this ,[=](){
         QString messages[2]{"Timer is over","Alarm is over"};
         QMessageBox ::warning(this,message,
                               "<p align=center> "+ message + "<p>"
                                "<br> Press OK to continue" ,QMessageBox::Ok);
         element->Set_is_active(false);
-
+        element->Set_time_left_in_ms(element->time_in_miliseconds());
+        //ПЕРЕМЕННАЯ ТИПА ЦВЕТ(стринг сначала сохранить а потом его возобновить)
+        ui->listWidget->currentItem()->backgroundColor() = QWidget::palette().color(QWidget::backgroundRole());
 
     });
     timer->start(time_to_count);
+    if(element->is_timer()){
+        while(element->is_active()){
+            QTimer::singleShot(1000, this,[=](){
+                element->Set_time_left_in_ms(element->time_left_in_ms() - 1000);
+            });
+        }
+        QTimer *_update_timer = new QTimer(this);
+        connect(_update_timer, &QTimer::timeout,[=](){
+          ui->listWidget->currentTextChanged(QTime(0,0,0).addMSecs(time_element[ui->listWidget->currentRow()].
+                                             time_left_in_ms()).toString("hh:mm:ss"));
+
+        });// every 1000 time left -=1000 , ui.listwidget.text = time left
+            _update_timer->start(400);
+    }
 }
 
 /*
@@ -95,7 +113,7 @@ void MainWindow::adding_to_list()
 {
     bool _tmp_is_timer;
     if(ui->Creation_of_type->text()=="Timer"){
-        if(ui->TimeSelection->time().msecsSinceStartOfDay()==0){
+        if(ui->TimeSelection->time().msecsSinceStartOfDay() == 0){
             QMessageBox::warning(this,"no time setted","You didn't set time.Try again");
             return;
         }

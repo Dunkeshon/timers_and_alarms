@@ -251,12 +251,6 @@ QListView::item:hover {
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuSettings">
-    <property name="title">
-     <string>Settings</string>
-    </property>
-    <addaction name="actiondo_not_disturb_time"/>
-   </widget>
    <widget class="QMenu" name="menuAdd">
     <property name="title">
      <string>Add</string>
@@ -264,8 +258,15 @@ QListView::item:hover {
     <addaction name="actionTimer"/>
     <addaction name="actionAlarm_Clock"/>
    </widget>
-   <addaction name="menuSettings"/>
+   <widget class="QMenu" name="menuDo_not_disturb">
+    <property name="title">
+     <string>Do not disturb</string>
+    </property>
+    <addaction name="actionshow_don_t_disturb_time"/>
+    <addaction name="actionset_change_don_t_disturb_time"/>
+   </widget>
    <addaction name="menuAdd"/>
+   <addaction name="menuDo_not_disturb"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actiondo_not_disturb_time">
@@ -281,6 +282,16 @@ QListView::item:hover {
   <action name="actionAlarm_Clock">
    <property name="text">
     <string>Alarm Clock</string>
+   </property>
+  </action>
+  <action name="actionshow_don_t_disturb_time">
+   <property name="text">
+    <string>show don't disturb time</string>
+   </property>
+  </action>
+  <action name="actionset_change_don_t_disturb_time">
+   <property name="text">
+    <string>set/change don't disturb time</string>
    </property>
   </action>
  </widget>

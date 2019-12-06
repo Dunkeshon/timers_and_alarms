@@ -2,10 +2,10 @@
 
 timer_alarm_element::timer_alarm_element(int time,bool is_timer,QString Audio_path)
 {
-    this->_time_in_miliseconds=time;
-    this->_is_timer=is_timer;
-    this->_audio_path=Audio_path;
-    this->_is_active = false;
+    _time_in_miliseconds= _time_left_in_ms= time;
+    _is_timer=is_timer;
+    _audio_path=Audio_path;
+    _is_active = false;
     if(is_timer){
         _icon_path =":/images/timer_icon_blue.png";
     }
@@ -29,6 +29,11 @@ void timer_alarm_element::Set_time_in_miliseconds(int time_in_miliseconds)
     _time_in_miliseconds=time_in_miliseconds;
 }
 
+void timer_alarm_element::Set_time_left_in_ms(int time_left_in_ms)
+{
+    _time_left_in_ms=time_left_in_ms;
+}
+
 void timer_alarm_element::Set_is_timer(bool is_timer)
 {
     _is_timer=is_timer;
@@ -49,27 +54,33 @@ void timer_alarm_element::Set_is_active(bool active)
     _is_active=active;
 }
 
-int timer_alarm_element::time_in_miliseconds()
+int timer_alarm_element::time_in_miliseconds() const
 {
     return _time_in_miliseconds;
 }
 
-bool timer_alarm_element::is_timer()
+int timer_alarm_element::time_left_in_ms() const
+{
+    return _time_left_in_ms;
+}
+
+bool timer_alarm_element::is_timer() const
 {
      return _is_timer;
 }
 
-QString timer_alarm_element::audio_path()
+QString timer_alarm_element::audio_path() const
 {
      return _audio_path;
 }
 
-QString timer_alarm_element::icon_path()
+QString timer_alarm_element::icon_path() const
 {
     return _icon_path;
 }
 
-bool timer_alarm_element::is_active()
+
+bool timer_alarm_element::is_active() const
 {
     return _is_active;
 }
