@@ -2,7 +2,7 @@
 
 timer_alarm_element::timer_alarm_element(int time,bool is_timer,QString Audio_path)
 {
-    _time_in_miliseconds= _time_left_in_ms= time;
+    _time_in_miliseconds= time;
     _is_timer=is_timer;
     _audio_path=Audio_path;
     _is_active = false;

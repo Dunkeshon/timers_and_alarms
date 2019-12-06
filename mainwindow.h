@@ -37,6 +37,7 @@ private slots:
 
     void on_startbutton_pressed();
 
+    void updating_time_of_timers(); // updating time every second in started timers
 private:
     Ui::MainWindow *ui;
     std::vector<timer_alarm_element> time_element;  // stores info about timer/alarm

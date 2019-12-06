@@ -11,10 +11,14 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->TimeSelection->setDisplayFormat("hh:mm:ss");
+    QTimer *update_timer = new QTimer(this);
     ui->container->setEnabled(false); // true also when changed
     changed = false;
     connect(this,&MainWindow::new_element_created,this,&MainWindow::adding_to_list);
     connect(this,&MainWindow::start_countdown,this,&MainWindow::countdown);
+    connect(update_timer,&QTimer::timeout,this,&MainWindow::updating_time_of_timers );
+    update_timer->start(1000);
 }
 
 MainWindow::~MainWindow()
@@ -51,7 +55,7 @@ void MainWindow::on_confirm_button_clicked()
 //    }
 
     ui->Creation_of_type->setText(":')");
-    ui->TimeSelection->setTime(QTime(0,0));
+    ui->TimeSelection->setTime(QTime(0,0,0));
     ui->container->setEnabled(false);
 }
 /*
@@ -63,13 +67,16 @@ void MainWindow::countdown()
     int time_to_count;
     QString message;
     QTimer *timer = new QTimer(this);
-    timer_alarm_element *element = &time_element[ui->listWidget->currentRow()];
+    int list_index = ui->listWidget->currentRow();
+    timer_alarm_element *element = &time_element[list_index];
+
     element->Set_is_active(true);
+
     if(element->is_timer()){ // if timer
         time_to_count=element->time_in_miliseconds();
+
         message = "Timer is over";
         //ui->listWidget->currentItem()->setBackgroundColor("red");
-
     }
     else{ // if alarm
         QTime current_time= QTime::currentTime();
@@ -78,32 +85,18 @@ void MainWindow::countdown()
         //ui->listWidget->currentItem()->setBackgroundColor("grey");
     }
 
-     timer->singleShot( time_to_count, this ,[=](){
-        QString messages[2]{"Timer is over","Alarm is over"};
+        timer->singleShot( time_to_count, this ,[=](){
+        element->Set_is_active(false);
+        //ui->listWidget->currentItem()->setText(QTime(0,0,0).toString());
         QMessageBox ::warning(this,message,
                               "<p align=center> "+ message + "<p>"
                                "<br> Press OK to continue" ,QMessageBox::Ok);
-        element->Set_is_active(false);
         element->Set_time_left_in_ms(element->time_in_miliseconds());
         //ПЕРЕМЕННАЯ ТИПА ЦВЕТ(стринг сначала сохранить а потом его возобновить)
-        ui->listWidget->currentItem()->backgroundColor() = QWidget::palette().color(QWidget::backgroundRole());
-
-    });
-    timer->start(time_to_count);
-    if(element->is_timer()){
-        while(element->is_active()){
-            QTimer::singleShot(1000, this,[=](){
-                element->Set_time_left_in_ms(element->time_left_in_ms() - 1000);
-            });
-        }
-        QTimer *_update_timer = new QTimer(this);
-        connect(_update_timer, &QTimer::timeout,[=](){
-          ui->listWidget->currentTextChanged(QTime(0,0,0).addMSecs(time_element[ui->listWidget->currentRow()].
-                                             time_left_in_ms()).toString("hh:mm:ss"));
-
-        });// every 1000 time left -=1000 , ui.listwidget.text = time left
-            _update_timer->start(400);
-    }
+       // ui->listWidget->item(list_index)->backgroundColor() = QWidget::palette().color(QWidget::backgroundRole());
+        ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString());
+        });
+        timer->start(time_to_count);
 }
 
 /*
@@ -123,11 +116,14 @@ void MainWindow::adding_to_list()
         _tmp_is_timer = false;
     }
     //add to vector
-
     time_element.push_back(timer_alarm_element(ui->TimeSelection->time().msecsSinceStartOfDay(),_tmp_is_timer,":/sounds/music/WAKE_ME_UP.mp3"));
-
+    //constructor don't work
+    //works only for LAST element from vector (from bottom of the list)
+    if(_tmp_is_timer){
+        time_element.back().Set_time_left_in_ms(time_element.back().time_in_miliseconds()); // вот тут пробовал
+    }
     QListWidgetItem * item = new QListWidgetItem(QIcon(time_element.back().icon_path()),
-                                                 QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds()).toString("hh:mm:ss"));
+                                                 QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds()).toString());
     ui->listWidget->setIconSize(QSize(24, 24));
     QFont newFont("Courier", 24, QFont::Bold, false);
     item->setFont(newFont);
@@ -158,6 +154,19 @@ void MainWindow::on_startbutton_pressed()
 {
     if(time_element[ui->listWidget->currentRow()].is_active()==false){
         emit(start_countdown());
+    }
+}
+
+void MainWindow::updating_time_of_timers()
+{
+
+    timer_alarm_element *_curr_element;
+    for (unsigned int i = 0;i<time_element.size();i++) {
+        _curr_element=&time_element[i];
+        if(_curr_element->is_timer() && _curr_element->is_active()){
+        _curr_element->Set_time_left_in_ms(_curr_element->time_left_in_ms()-1000);
+        ui->listWidget->item(i)->setText(QTime(0,0,0).addMSecs(_curr_element->time_left_in_ms()).toString());
+        }
     }
 }
 
