@@ -36,9 +36,13 @@ private slots:
     void on_startbutton_pressed();
 
     void updating_time_of_timers(); // updating time every second in started timers
+
+    void on_choose_sound_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::vector<timer_alarm_element> time_element;  // stores info about timer/alarm
     bool changed;
+    QString _temp_adress_of_audio;
 };
 #endif // MAINWINDOW_H

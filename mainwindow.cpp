@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QMediaPlayer>
 #include <QMessageBox>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -83,7 +84,7 @@ void MainWindow::countdown()
         QTime current_time= QTime::currentTime();
         time_to_count = element->time_in_miliseconds() - current_time.msecsSinceStartOfDay() ;
         message ="Alarm is over";
-        player->setMedia(QUrl::fromLocalFile(element->audio_path()));
+        player->setMedia(QUrl(element->audio_path()));
         player->setVolume(50);
         //ui->listWidget->currentItem()->setBackgroundColor("grey");
     }
@@ -120,7 +121,7 @@ void MainWindow::adding_to_list()
         _tmp_is_timer = false;
     }
     //add to vector
-    time_element.push_back(timer_alarm_element(ui->TimeSelection->time().msecsSinceStartOfDay(),_tmp_is_timer,":/sounds/music/WAKE_ME_UP.mp3"));
+    time_element.push_back(timer_alarm_element(ui->TimeSelection->time().msecsSinceStartOfDay(),_tmp_is_timer,_temp_adress_of_audio));
     QListWidgetItem * item = new QListWidgetItem(QIcon(time_element.back().icon_path()),
                                                  QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds()).toString());
     ui->listWidget->setIconSize(QSize(24, 24));
@@ -178,3 +179,14 @@ void MainWindow::updating_time_of_timers()
 
 
 
+
+void MainWindow::on_choose_sound_clicked()
+{
+    QFileDialog dialog;
+    //dialog.setDirectory(":/sounds/music/");
+    _temp_adress_of_audio = dialog.getOpenFileName(this,
+                                                   "Choose Audio",
+                                                   ":/sounds/music/",
+                                                   "Music File (*.mp3)"
+                                                   );
+}
