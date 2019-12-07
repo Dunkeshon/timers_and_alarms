@@ -87,11 +87,10 @@ void MainWindow::countdown()
 
         timer->singleShot( time_to_count, this ,[=](){
         element->Set_is_active(false);
-        //ui->listWidget->currentItem()->setText(QTime(0,0,0).toString());
+     //   ui->listWidget->currentItem()->setText(QTime(0,0,0).toString());
         QMessageBox ::warning(this,message,
                               "<p align=center> "+ message + "<p>"
                                "<br> Press OK to continue" ,QMessageBox::Ok);
-        element->Set_time_left_in_ms(element->time_in_miliseconds());
         //ПЕРЕМЕННАЯ ТИПА ЦВЕТ(стринг сначала сохранить а потом его возобновить)
        // ui->listWidget->item(list_index)->backgroundColor() = QWidget::palette().color(QWidget::backgroundRole());
         ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString());
@@ -117,11 +116,6 @@ void MainWindow::adding_to_list()
     }
     //add to vector
     time_element.push_back(timer_alarm_element(ui->TimeSelection->time().msecsSinceStartOfDay(),_tmp_is_timer,":/sounds/music/WAKE_ME_UP.mp3"));
-    //constructor don't work
-    //works only for LAST element from vector (from bottom of the list)
-    if(_tmp_is_timer){
-        time_element.back().Set_time_left_in_ms(time_element.back().time_in_miliseconds()); // вот тут пробовал
-    }
     QListWidgetItem * item = new QListWidgetItem(QIcon(time_element.back().icon_path()),
                                                  QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds()).toString());
     ui->listWidget->setIconSize(QSize(24, 24));
@@ -159,13 +153,19 @@ void MainWindow::on_startbutton_pressed()
 
 void MainWindow::updating_time_of_timers()
 {
-
+    QTime _current_changes_of_time;
+    int _current_ms;
     timer_alarm_element *_curr_element;
     for (unsigned int i = 0;i<time_element.size();i++) {
         _curr_element=&time_element[i];
         if(_curr_element->is_timer() && _curr_element->is_active()){
-        _curr_element->Set_time_left_in_ms(_curr_element->time_left_in_ms()-1000);
-        ui->listWidget->item(i)->setText(QTime(0,0,0).addMSecs(_curr_element->time_left_in_ms()).toString());
+     //   _curr_element->Set_time_left_in_ms(_curr_element->time_left_in_ms()-1000);
+
+        _current_changes_of_time =QTime::fromString(ui->listWidget->item(i)->text());
+        _current_ms = _current_changes_of_time.msecsSinceStartOfDay();
+        if(_current_ms!=0){
+            ui->listWidget->item(i)->setText(QTime(0,0,0).addMSecs(_current_ms-1000).toString());
+            }
         }
     }
 }

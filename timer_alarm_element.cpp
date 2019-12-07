@@ -29,10 +29,6 @@ void timer_alarm_element::Set_time_in_miliseconds(int time_in_miliseconds)
     _time_in_miliseconds=time_in_miliseconds;
 }
 
-void timer_alarm_element::Set_time_left_in_ms(int time_left_in_ms)
-{
-    _time_left_in_ms=time_left_in_ms;
-}
 
 void timer_alarm_element::Set_is_timer(bool is_timer)
 {
@@ -59,10 +55,6 @@ int timer_alarm_element::time_in_miliseconds() const
     return _time_in_miliseconds;
 }
 
-int timer_alarm_element::time_left_in_ms() const
-{
-    return _time_left_in_ms;
-}
 
 bool timer_alarm_element::is_timer() const
 {
