@@ -33,8 +33,6 @@ private slots:
 
     void on_pushButton_2_clicked();
 
-    //void on_startbutton_clicked();
-
     void on_startbutton_pressed();
 
     void updating_time_of_timers(); // updating time every second in started timers

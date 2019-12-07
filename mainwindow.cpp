@@ -64,6 +64,7 @@ void MainWindow::on_confirm_button_clicked()
  */
 void MainWindow::countdown()
 {
+    QMediaPlayer *player = new QMediaPlayer;
     int time_to_count;
     QString message;
     QTimer *timer = new QTimer(this);
@@ -82,12 +83,16 @@ void MainWindow::countdown()
         QTime current_time= QTime::currentTime();
         time_to_count = element->time_in_miliseconds() - current_time.msecsSinceStartOfDay() ;
         message ="Alarm is over";
+        player->setMedia(QUrl::fromLocalFile(element->audio_path()));
+        player->setVolume(50);
         //ui->listWidget->currentItem()->setBackgroundColor("grey");
     }
 
         timer->singleShot( time_to_count, this ,[=](){
         element->Set_is_active(false);
      //   ui->listWidget->currentItem()->setText(QTime(0,0,0).toString());
+        player->play();
+
         QMessageBox ::warning(this,message,
                               "<p align=center> "+ message + "<p>"
                                "<br> Press OK to continue" ,QMessageBox::Ok);
@@ -143,7 +148,9 @@ void MainWindow::on_pushButton_2_clicked()
 //    }
 
 }
-
+/*
+ * starting timer/alarm
+ */
 void MainWindow::on_startbutton_pressed()
 {
     if(time_element[ui->listWidget->currentRow()].is_active()==false){
@@ -159,8 +166,6 @@ void MainWindow::updating_time_of_timers()
     for (unsigned int i = 0;i<time_element.size();i++) {
         _curr_element=&time_element[i];
         if(_curr_element->is_timer() && _curr_element->is_active()){
-     //   _curr_element->Set_time_left_in_ms(_curr_element->time_left_in_ms()-1000);
-
         _current_changes_of_time =QTime::fromString(ui->listWidget->item(i)->text());
         _current_ms = _current_changes_of_time.msecsSinceStartOfDay();
         if(_current_ms!=0){
@@ -170,14 +175,6 @@ void MainWindow::updating_time_of_timers()
     }
 }
 
-/*
- * starting timer/alarm
- */
 
-//void MainWindow::on_startbutton_clicked()
-//{
-//    if(time_element[ui->listWidget->currentRow()].is_active()==false){
-//        emit(start_countdown());
-//    }
-//    //choosen element -> start (emit signal start timer )
-//}
+
+
