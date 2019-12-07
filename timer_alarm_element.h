@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <vector>
+#include <QFileDialog>
 
 class timer_alarm_element
 {
@@ -10,13 +11,13 @@ private:
      bool _is_active;
      int _time_in_miliseconds; // time of timer
      bool _is_timer;
-     QString _audio_path;
+     QUrl _audio_path;
      QString _icon_path;
 
 public:
 
 
-    timer_alarm_element(int time,bool is_timer,QString Audio_path);
+    timer_alarm_element(int time,bool is_timer,QUrl Audio_path);
     timer_alarm_element(const timer_alarm_element &obj);
     void Set_time_in_miliseconds(int time_in_miliseconds);
     void Set_is_active(bool active);
@@ -28,7 +29,7 @@ public:
     int time_left_in_ms() const;
     bool is_active() const;
     bool is_timer() const;
-    QString audio_path() const;
+    QUrl audio_path() const;
     QString icon_path() const;
 
 

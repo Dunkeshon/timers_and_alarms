@@ -1,6 +1,6 @@
 #include "timer_alarm_element.h"
 
-timer_alarm_element::timer_alarm_element(int time,bool is_timer,QString Audio_path)
+timer_alarm_element::timer_alarm_element(int time,bool is_timer,QUrl Audio_path)
 {
     _time_in_miliseconds= time;
     _is_timer=is_timer;
@@ -61,7 +61,7 @@ bool timer_alarm_element::is_timer() const
      return _is_timer;
 }
 
-QString timer_alarm_element::audio_path() const
+QUrl timer_alarm_element::audio_path() const
 {
      return _audio_path;
 }

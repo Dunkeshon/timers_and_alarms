@@ -78,25 +78,48 @@ void MainWindow::countdown()
         time_to_count=element->time_in_miliseconds();
 
         message = "Timer is over";
+        qDebug()<<player->mediaStatus();
+        qDebug()<<" before setMedia";
+    player->setMedia(QUrl(element->audio_path()));
+        qDebug()<<player->mediaStatus();
+        qDebug()<<" after setMedia";
+    player->setVolume(49);
+        qDebug()<<player->mediaStatus();
+        qDebug()<<" after set volume";
         //ui->listWidget->currentItem()->setBackgroundColor("red");
     }
     else{ // if alarm
         QTime current_time= QTime::currentTime();
         time_to_count = element->time_in_miliseconds() - current_time.msecsSinceStartOfDay() ;
         message ="Alarm is over";
+            qDebug()<<player->mediaStatus();
+            qDebug()<<" before setMedia";
         player->setMedia(QUrl(element->audio_path()));
-        player->setVolume(50);
+            qDebug()<<player->mediaStatus();
+            qDebug()<<" after setMedia";
+        player->setVolume(49);
+            qDebug()<<player->mediaStatus();
+            qDebug()<<" after set volume";
         //ui->listWidget->currentItem()->setBackgroundColor("grey");
     }
 
         timer->singleShot( time_to_count, this ,[=](){
         element->Set_is_active(false);
      //   ui->listWidget->currentItem()->setText(QTime(0,0,0).toString());
-        player->play();
 
+        player->play();
+            qDebug()<<player->mediaStatus();
+            qDebug()<<" after play";
         QMessageBox ::warning(this,message,
                               "<p align=center> "+ message + "<p>"
                                "<br> Press OK to continue" ,QMessageBox::Ok);
+        if(QMessageBox::Ok){
+
+            player->stop();
+                qDebug()<<player->mediaStatus();
+                qDebug()<<" after stop";
+            delete player;
+        }
         //ПЕРЕМЕННАЯ ТИПА ЦВЕТ(стринг сначала сохранить а потом его возобновить)
        // ui->listWidget->item(list_index)->backgroundColor() = QWidget::palette().color(QWidget::backgroundRole());
         ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString());
@@ -183,10 +206,10 @@ void MainWindow::updating_time_of_timers()
 void MainWindow::on_choose_sound_clicked()
 {
     QFileDialog dialog;
-    //dialog.setDirectory(":/sounds/music/");
-    _temp_adress_of_audio = dialog.getOpenFileName(this,
-                                                   "Choose Audio",
-                                                   ":/sounds/music/",
-                                                   "Music File (*.mp3)"
-                                                   );
+    dialog.setDirectory(":/sounds/music/");
+    _temp_adress_of_audio = dialog.getOpenFileUrl(this,
+                                                  "Choose Audio",
+                                                  QUrl("qrc:/sounds/music/"),
+                                                  "Music File (*.mp3)");
+
 }
