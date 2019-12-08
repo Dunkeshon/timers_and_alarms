@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow
 public:
     int do_not_distorb_from;
     int do_not_distorb_to;
+    QString display_format;
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 signals:
@@ -51,6 +52,14 @@ private slots:
     void change_ui_disturb();
 
     void on_dont_disturb_check_clicked(bool checked);
+
+    void on_actionhh_mm_Am_Pm_triggered();
+
+    void on_actionhh_mm_ss_Am_Pm_triggered();
+
+    void on_actionhh_mm_triggered();
+
+    void on_actionhh_mm_ss_triggered();
 
 private:
     Ui::MainWindow *ui;

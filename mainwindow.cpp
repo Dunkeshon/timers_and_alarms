@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->TimeSelection->setDisplayFormat("hh:mm:ss");
+    ui->TimeSelection->setDisplayFormat(display_format);
     QTimer *update_timer = new QTimer(this);
     ui->container->setEnabled(false); // true also when changed
     changed = false;
@@ -242,4 +242,24 @@ void MainWindow::on_dont_disturb_check_clicked(bool checked)
     if(checked) { ui->dont_disturb_check->setTristate(true); } else {
                       ui->dont_disturb_check->setTristate(false);
          }
+}
+
+void MainWindow::on_actionhh_mm_Am_Pm_triggered()
+{
+    display_format="hh:mm a";
+}
+
+void MainWindow::on_actionhh_mm_ss_Am_Pm_triggered()
+{
+    display_format="hh:mm:ss a";
+}
+
+void MainWindow::on_actionhh_mm_triggered()
+{
+    display_format="hh:mm";
+}
+
+void MainWindow::on_actionhh_mm_ss_triggered()
+{
+    display_format="hh:mm:ss";
 }

@@ -126,9 +126,6 @@ QListView::item:hover {
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
-         <property name="displayFormat">
-          <string>HH:mm:ss</string>
-         </property>
         </widget>
        </item>
        <item>
@@ -223,8 +220,24 @@ QListView::item:hover {
     </property>
     <addaction name="actionset_change_don_t_disturb_time"/>
    </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <widget class="QMenu" name="menutime_format">
+     <property name="title">
+      <string>time format</string>
+     </property>
+     <addaction name="actionhh_mm_ss"/>
+     <addaction name="actionhh_mm"/>
+     <addaction name="actionhh_mm_ss_Am_Pm"/>
+     <addaction name="actionhh_mm_Am_Pm"/>
+    </widget>
+    <addaction name="menutime_format"/>
+   </widget>
    <addaction name="menuAdd"/>
    <addaction name="menuDo_not_disturb"/>
+   <addaction name="menuSettings"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actiondo_not_disturb_time">
@@ -250,6 +263,26 @@ QListView::item:hover {
   <action name="actionset_change_don_t_disturb_time">
    <property name="text">
     <string>set/change don't disturb time</string>
+   </property>
+  </action>
+  <action name="actionhh_mm_ss">
+   <property name="text">
+    <string>hh:mm:ss</string>
+   </property>
+  </action>
+  <action name="actionhh_mm">
+   <property name="text">
+    <string>hh:mm</string>
+   </property>
+  </action>
+  <action name="actionhh_mm_ss_Am_Pm">
+   <property name="text">
+    <string>hh:mm:ss    Am/Pm</string>
+   </property>
+  </action>
+  <action name="actionhh_mm_Am_Pm">
+   <property name="text">
+    <string>hh:mm    Am /Pm</string>
    </property>
   </action>
  </widget>

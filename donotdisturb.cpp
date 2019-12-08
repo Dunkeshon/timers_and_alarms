@@ -6,6 +6,7 @@ DoNotDisturb::DoNotDisturb(QWidget *parent) :
     ui(new Ui::DoNotDisturb)
 {
     ui->setupUi(this);
+    setDisplay_format();
 }
 
 DoNotDisturb::~DoNotDisturb()
@@ -27,4 +28,11 @@ void DoNotDisturb::on_confirm_disturb_clicked()
 void DoNotDisturb::on_cancel_disturb_clicked()
 {
     hide();
+}
+
+void DoNotDisturb::setDisplay_format()
+{
+    MainWindow * temp = qobject_cast <MainWindow *>(parent());
+    ui->disturb_to->setDisplayFormat(temp->display_format);
+    ui->disturb_from->setDisplayFormat(temp->display_format);
 }

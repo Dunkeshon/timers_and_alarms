@@ -19,6 +19,7 @@ private slots:
     void on_confirm_disturb_clicked();
 
     void on_cancel_disturb_clicked();
+    void setDisplay_format();
 
 private:
     Ui::DoNotDisturb *ui;
