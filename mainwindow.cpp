@@ -6,8 +6,6 @@
 #include <QMediaPlayer>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <fstream>
-
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -21,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this,&MainWindow::new_element_created,this,&MainWindow::adding_to_list);
     connect(this,&MainWindow::start_countdown,this,&MainWindow::countdown);
     connect(update_timer,&QTimer::timeout,this,&MainWindow::updating_time_of_timers );
+    connect(this,&MainWindow::do_not_disturb_changed,this,&MainWindow::change_ui_disturb);
     update_timer->start(1000);
 
 }
@@ -81,53 +80,47 @@ void MainWindow::countdown()
         time_to_count=element->time_in_miliseconds();
 
         message = "Timer is over";
-        qDebug()<<player->mediaStatus();
-        qDebug()<<" before setMedia";
-    player->setMedia(QUrl(element->audio_path()));
-        qDebug()<<player->mediaStatus();
-        qDebug()<<" after setMedia";
-    player->setVolume(49);
-        qDebug()<<player->mediaStatus();
-        qDebug()<<" after set volume";
+        player->setMedia(QUrl(element->audio_path()));
+        player->setVolume(49);
         //ui->listWidget->currentItem()->setBackgroundColor("red");
     }
     else{ // if alarm
         QTime current_time= QTime::currentTime();
         time_to_count = element->time_in_miliseconds() - current_time.msecsSinceStartOfDay() ;
         message ="Alarm is over";
-            qDebug()<<player->mediaStatus();
-            qDebug()<<" before setMedia";
         player->setMedia(QUrl(element->audio_path()));
-            qDebug()<<player->mediaStatus();
-            qDebug()<<" after setMedia";
         player->setVolume(49);
-            qDebug()<<player->mediaStatus();
-            qDebug()<<" after set volume";
         //ui->listWidget->currentItem()->setBackgroundColor("grey");
     }
 
-        timer->singleShot( time_to_count, this ,[=](){
-        element->Set_is_active(false);
-     //   ui->listWidget->currentItem()->setText(QTime(0,0,0).toString());
+    timer->singleShot( time_to_count, this ,[=](){
 
+        element->Set_is_active(false);
+        if(ui->dont_disturb_check->isTristate()){
+            if((QTime::currentTime().msecsSinceStartOfDay()>do_not_distorb_from)&&
+                    (QTime::currentTime().msecsSinceStartOfDay()<do_not_distorb_to)){
+                    delete player;
+                    ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString());
+            }
+        }
+        else if(!ui->dont_disturb_check->isTristate()){
         player->play();
-            qDebug()<<player->mediaStatus();
-            qDebug()<<" after play";
+
         QMessageBox ::warning(this,message,
                               "<p align=center> "+ message + "<p>"
                                "<br> Press OK to continue" ,QMessageBox::Ok);
-        if(QMessageBox::Ok){
+            if(QMessageBox::Ok){
+                 player->stop();
+                 delete player;
+            }
 
-            player->stop();
-                qDebug()<<player->mediaStatus();
-                qDebug()<<" after stop";
-            delete player;
-        }
+
         //ПЕРЕМЕННАЯ ТИПА ЦВЕТ(стринг сначала сохранить а потом его возобновить)
        // ui->listWidget->item(list_index)->backgroundColor() = QWidget::palette().color(QWidget::backgroundRole());
         ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString());
-        });
-        timer->start(time_to_count);
+       }
+    });
+    timer->start(time_to_count);
 }
 
 /*
@@ -229,4 +222,24 @@ void MainWindow::closeEvent(QCloseEvent *event)
         } else {
             event->ignore();
         }
+}
+
+void MainWindow::on_actionset_change_don_t_disturb_time_triggered()
+{
+    child= new DoNotDisturb(this);
+    child->show();
+
+}
+
+void MainWindow::change_ui_disturb()
+{
+    ui->from_to_dont_disturb->setText(QTime(0,0,0).addMSecs(do_not_distorb_from).toString() +" - "+QTime(0,0,0).addMSecs(do_not_distorb_to).toString() );
+}
+
+
+void MainWindow::on_dont_disturb_check_clicked(bool checked)
+{
+    if(checked) { ui->dont_disturb_check->setTristate(true); } else {
+                      ui->dont_disturb_check->setTristate(false);
+         }
 }

@@ -6,6 +6,7 @@
 #include <vector>
 #include <QFileDialog>
 #include <QCloseEvent>
+#include "donotdisturb.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -15,12 +16,14 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    int do_not_distorb_from;
+    int do_not_distorb_to;
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 signals:
     void new_element_created(); // created in edit window
     void start_countdown(); // pressed on start button
-
+    void do_not_disturb_changed();
 private slots:
 
     void on_actionTimer_triggered(); // add timer
@@ -43,10 +46,17 @@ private slots:
 
     void closeEvent(QCloseEvent *event);
 
+    void on_actionset_change_don_t_disturb_time_triggered();
+
+    void change_ui_disturb();
+
+    void on_dont_disturb_check_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
     std::vector<timer_alarm_element> time_element;  // stores info about timer/alarm
     bool changed;
     QUrl _temp_adress_of_audio;
+    DoNotDisturb *child;
 };
 #endif // MAINWINDOW_H

@@ -16,15 +16,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    donotdisturb.cpp \
     main.cpp \
     mainwindow.cpp \
     timer_alarm_element.cpp
 
 HEADERS += \
+    donotdisturb.h \
     mainwindow.h \
     timer_alarm_element.h
 
 FORMS += \
+    donotdisturb.ui \
     mainwindow.ui
 
 # Default rules for deployment.
