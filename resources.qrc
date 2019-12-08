@@ -8,5 +8,7 @@
     </qresource>
     <qresource prefix="/sounds">
         <file>music/WAKE_ME_UP.mp3</file>
+        <file>music/Johnny Utah Honeypie.mp3</file>
+        <file>music/green-day-boulevard-of-broken-dreams.mp3</file>
     </qresource>
 </RCC>
