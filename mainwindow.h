@@ -41,14 +41,6 @@ private slots:
 
     void on_choose_sound_clicked();
 
-    void save_data();
-
-    void update_save_data();
-
-    void load_data();
-
-    void renew_list_of_timers();
-
     void closeEvent(QCloseEvent *event);
 
 private:

@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->TimeSelection->setDisplayFormat("hh:mm:ss");
-    //renew_list_of_timers();
     QTimer *update_timer = new QTimer(this);
     ui->container->setEnabled(false); // true also when changed
     changed = false;
@@ -156,7 +155,6 @@ void MainWindow::adding_to_list()
     item->setFont(newFont);
     //item->setTextColor("black");
     ui->listWidget->addItem(item);
-    update_save_data();
 }
 
 /*
@@ -219,99 +217,7 @@ void MainWindow::on_choose_sound_clicked()
 
 }
 
-void MainWindow::save_data()
-{
-    timer_alarm_element _temp;
-    //time_element.clear();
-    std::ofstream myfile("datafile.dat",std::ios::out|std::ios::binary|std::ios::trunc);
-    if(myfile.is_open()){
 
-        for(unsigned int i = 0;i<time_element.size();i++,myfile.seekp(sizeof(_temp),myfile.cur)){
-            _temp=time_element[i];
-            myfile.write((char*)&(_temp),sizeof(_temp));
-        }
-        // каждый раз пока не конец файла записывать
-        // считывать и передвигать указатель
-        // передвигать указатель
-        //
-        //size=myfile.tellp();
-        myfile.close();
-    }
-    else{
-        qDebug()<<"opening to write error";
-    }
-}
-
-void MainWindow::update_save_data()
-{
-    timer_alarm_element _temp;
-    std::ofstream myfile("datafile.dat",std::ios::out|std::ios::binary|std::ios::ate);
-    if(myfile.is_open()){
-
-        for(unsigned int i = 0;i<time_element.size();i++,myfile.seekp(sizeof(_temp),myfile.cur)){
-         _temp=time_element[i];
-         myfile.write((char*)&(_temp),sizeof(_temp));
-        }
-        // каждый раз пока не конец файла записывать
-        // считывать и передвигать указатель
-        // передвигать указатель
-        //
-        //size=myfile.tellp();
-        myfile.close();
-    }
-    else{
-        qDebug()<<"opening to write error";
-    }
-}
-
-void MainWindow::load_data()
-{
-    std::ios::streampos size;
-    int amount_of_timers;
-    timer_alarm_element _temp;
-    time_element.clear();
-    std::ifstream myfile("datafile.dat",std::ios::in|std::ios::binary|std::ios::ate);
-    if(myfile.is_open()){
-        size=myfile.tellg();
-        amount_of_timers = size/sizeof(_temp);
-        myfile.seekg(0,myfile.beg);
-        while(amount_of_timers!=0){
-            myfile.read((char*)&_temp,sizeof(_temp));
-            time_element.push_back(_temp);
-            myfile.seekg(sizeof(_temp),myfile.cur);
-            amount_of_timers--;
-       }
-        myfile.close();
-    }
-    else{
-        qDebug()<<"opening to read error";
-    }
-
-}
-
-void MainWindow::renew_list_of_timers()
-{
-    load_data();
-    QString _new_icon_path;
-    if(!time_element.empty()){
-        unsigned long int i= time_element.size();
-        while( i !=0){
-        if(time_element.back().is_timer()){
-            _new_icon_path =":/images/timer_icon_blue.png";
-        }
-        else{
-            _new_icon_path = ":/images/alarm_icon_blue.png";
-        }
-        QListWidgetItem * item = new QListWidgetItem(QIcon(_new_icon_path),
-                                                 QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds()).toString());
-        ui->listWidget->setIconSize(QSize(24, 24));
-        QFont newFont("Courier", 24, QFont::Bold, false);
-        item->setFont(newFont);
-        ui->listWidget->addItem(item);
-        i--;
-        }
-    }
-}
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -319,7 +225,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
                                                                     tr("Are you sure?\n"),
                                                                     QMessageBox::Cancel | QMessageBox::Yes);
         if (resBtn == QMessageBox::Yes) {
-            save_data();
             event->accept();
         } else {
             event->ignore();
