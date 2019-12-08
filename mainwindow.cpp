@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->TimeSelection->setDisplayFormat(display_format);
+    ui->TimeSelection->setDisplayFormat("hh:mm:ss");
     QTimer *update_timer = new QTimer(this);
     ui->container->setEnabled(false); // true also when changed
     changed = false;
@@ -32,16 +32,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionTimer_triggered()
 {
-    // set is active ;
-    // normal color ;
+    ui->TimeSelection->setDisplayFormat(display_format);
     ui->container->setEnabled(true);
     ui->Creation_of_type->setText("Timer");
     ui->TimeSelection->setTime(QTime(0,0));
-
 }
 
 void MainWindow::on_actionAlarm_Clock_triggered()
 {
+    ui->TimeSelection->setDisplayFormat(display_format);
     ui->container->setEnabled(true);
     ui->Creation_of_type->setText("Alarm");
     ui->TimeSelection->setTime(QTime::currentTime());
@@ -53,10 +52,7 @@ void MainWindow::on_confirm_button_clicked()
     if( !changed ){
         emit(new_element_created()); // add to list
     }
-//    else{
-//        emit() // change element and set changed to false
-//    }
-
+    ui->TimeSelection->setDisplayFormat(display_format);
     ui->Creation_of_type->setText(":')");
     ui->TimeSelection->setTime(QTime(0,0,0));
     ui->container->setEnabled(false);
@@ -100,7 +96,7 @@ void MainWindow::countdown()
             if((QTime::currentTime().msecsSinceStartOfDay()>do_not_distorb_from)&&
                     (QTime::currentTime().msecsSinceStartOfDay()<do_not_distorb_to)){
                     delete player;
-                    ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString());
+                    ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
             }
         }
         else if(!ui->dont_disturb_check->isTristate()){
@@ -117,7 +113,7 @@ void MainWindow::countdown()
 
         //ПЕРЕМЕННАЯ ТИПА ЦВЕТ(стринг сначала сохранить а потом его возобновить)
        // ui->listWidget->item(list_index)->backgroundColor() = QWidget::palette().color(QWidget::backgroundRole());
-        ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString());
+        ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
        }
     });
     timer->start(time_to_count);
@@ -142,7 +138,7 @@ void MainWindow::adding_to_list()
     //add to vector
     time_element.push_back(timer_alarm_element(ui->TimeSelection->time().msecsSinceStartOfDay(),_tmp_is_timer,_temp_adress_of_audio));
     QListWidgetItem * item = new QListWidgetItem(QIcon(time_element.back().icon_path()),
-                                                 QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds()).toString());
+                                                 QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds()).toString(display_format));
     ui->listWidget->setIconSize(QSize(24, 24));
     QFont newFont("Courier", 24, QFont::Bold, false);
     item->setFont(newFont);
@@ -161,11 +157,6 @@ void MainWindow::on_pushButton_2_clicked()
     time_element.erase(time_element.begin()+_el_to_delete);
     ui->listWidget->takeItem(ui->listWidget->currentRow());
 
-    //DEBUG
-//    for (const auto &i : time_element) {
-//            qDebug() << QTime(0,0,0).addMSecs(i.time_in_miliseconds).toString("hh:mm:ss");
-//            qDebug() << " timer left ";
-//    }
 
 }
 /*
@@ -189,7 +180,7 @@ void MainWindow::updating_time_of_timers()
         _current_changes_of_time =QTime::fromString(ui->listWidget->item(i)->text());
         _current_ms = _current_changes_of_time.msecsSinceStartOfDay();
         if(_current_ms!=0){
-            ui->listWidget->item(i)->setText(QTime(0,0,0).addMSecs(_current_ms-1000).toString());
+            ui->listWidget->item(i)->setText(QTime(0,0,0).addMSecs(_current_ms-1000).toString(display_format));
             }
         }
     }
@@ -233,7 +224,7 @@ void MainWindow::on_actionset_change_don_t_disturb_time_triggered()
 
 void MainWindow::change_ui_disturb()
 {
-    ui->from_to_dont_disturb->setText(QTime(0,0,0).addMSecs(do_not_distorb_from).toString() +" - "+QTime(0,0,0).addMSecs(do_not_distorb_to).toString() );
+    ui->from_to_dont_disturb->setText(QTime(0,0,0).addMSecs(do_not_distorb_from).toString(display_format) +" - "+QTime(0,0,0).addMSecs(do_not_distorb_to).toString(display_format) );
 }
 
 
