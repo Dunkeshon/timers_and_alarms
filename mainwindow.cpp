@@ -96,7 +96,7 @@ void MainWindow::countdown()
             if((QTime::currentTime().msecsSinceStartOfDay()>do_not_distorb_from)&&
                     (QTime::currentTime().msecsSinceStartOfDay()<do_not_distorb_to)){
                     delete player;
-                    ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString());
+                    ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
             }
         }
         else if(!ui->dont_disturb_check->isTristate()){
@@ -113,7 +113,7 @@ void MainWindow::countdown()
 
         //ПЕРЕМЕННАЯ ТИПА ЦВЕТ(стринг сначала сохранить а потом его возобновить)
        // ui->listWidget->item(list_index)->backgroundColor() = QWidget::palette().color(QWidget::backgroundRole());
-        ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString());
+        ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
        }
     });
     timer->start(time_to_count);
@@ -138,7 +138,7 @@ void MainWindow::adding_to_list()
     //add to vector
     time_element.push_back(timer_alarm_element(ui->TimeSelection->time().msecsSinceStartOfDay(),_tmp_is_timer,_temp_adress_of_audio));
     QListWidgetItem * item = new QListWidgetItem(QIcon(time_element.back().icon_path()),
-                                                 QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds()).toString());
+                                                 QTime(0,0,0).addMSecs(time_element.back().time_in_miliseconds()).toString(display_format));
     ui->listWidget->setIconSize(QSize(24, 24));
     QFont newFont("Courier", 24, QFont::Bold, false);
     item->setFont(newFont);
@@ -180,7 +180,7 @@ void MainWindow::updating_time_of_timers()
         _current_changes_of_time =QTime::fromString(ui->listWidget->item(i)->text());
         _current_ms = _current_changes_of_time.msecsSinceStartOfDay();
         if(_current_ms!=0){
-            ui->listWidget->item(i)->setText(QTime(0,0,0).addMSecs(_current_ms-1000).toString());
+            ui->listWidget->item(i)->setText(QTime(0,0,0).addMSecs(_current_ms-1000).toString(display_format));
             }
         }
     }
@@ -224,7 +224,7 @@ void MainWindow::on_actionset_change_don_t_disturb_time_triggered()
 
 void MainWindow::change_ui_disturb()
 {
-    ui->from_to_dont_disturb->setText(QTime(0,0,0).addMSecs(do_not_distorb_from).toString() +" - "+QTime(0,0,0).addMSecs(do_not_distorb_to).toString());
+    ui->from_to_dont_disturb->setText(QTime(0,0,0).addMSecs(do_not_distorb_from).toString(display_format) +" - "+QTime(0,0,0).addMSecs(do_not_distorb_to).toString(display_format));
 }
 
 
