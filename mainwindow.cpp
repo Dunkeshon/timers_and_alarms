@@ -12,7 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->TimeSelection->setDisplayFormat("hh:mm:ss");
+    display_format = "hh:mm:ss";
+    ui->TimeSelection->setDisplayFormat(display_format);
     QTimer *update_timer = new QTimer(this);
     ui->container->setEnabled(false); // true also when changed
     changed = false;
