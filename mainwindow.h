@@ -47,6 +47,8 @@ private slots:
 
     void load_data();
 
+    void renew_list_of_timers();
+
     void closeEvent(QCloseEvent *event);
 
 private:

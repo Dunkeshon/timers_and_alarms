@@ -24,8 +24,8 @@ timer_alarm_element::timer_alarm_element(const timer_alarm_element & obj)
 {
     _time_in_miliseconds=obj._time_in_miliseconds;
     _is_timer=obj._is_timer;
-    _audio_path=obj._audio_path;
     _is_active=obj._is_active;
+    _audio_path=obj._audio_path;
     _icon_path=obj._icon_path;
 }
 
