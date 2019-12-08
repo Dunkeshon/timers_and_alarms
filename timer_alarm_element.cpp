@@ -1,5 +1,10 @@
 #include "timer_alarm_element.h"
 
+timer_alarm_element::timer_alarm_element()
+{
+
+}
+
 timer_alarm_element::timer_alarm_element(int time,bool is_timer,QUrl Audio_path)
 {
     _time_in_miliseconds= time;

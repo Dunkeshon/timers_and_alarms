@@ -6,12 +6,15 @@
 #include <QMediaPlayer>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <fstream>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    load_data();
     ui->TimeSelection->setDisplayFormat("hh:mm:ss");
     QTimer *update_timer = new QTimer(this);
     ui->container->setEnabled(false); // true also when changed
@@ -20,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this,&MainWindow::start_countdown,this,&MainWindow::countdown);
     connect(update_timer,&QTimer::timeout,this,&MainWindow::updating_time_of_timers );
     update_timer->start(1000);
+
 }
 
 MainWindow::~MainWindow()
@@ -152,6 +156,7 @@ void MainWindow::adding_to_list()
     item->setFont(newFont);
     //item->setTextColor("black");
     ui->listWidget->addItem(item);
+    update_save_data();
 }
 
 /*
@@ -212,4 +217,79 @@ void MainWindow::on_choose_sound_clicked()
                                                   QUrl("qrc:/sounds/music/"),
                                                   "Music File (*.mp3)");
 
+}
+
+void MainWindow::save_data()
+{
+    //time_element.clear();
+    std::ofstream myfile("datafile.dat",std::ios::out|std::ios::binary|std::ios::trunc);
+    if(myfile.is_open()){
+
+        for(unsigned int i = 0;i<time_element.size();i++){
+         myfile.write((char*)&(time_element[i]),sizeof(time_element[i]));
+         myfile.seekp(sizeof(time_element[i], myfile.cur));
+        }
+        // каждый раз пока не конец файла записывать
+        // считывать и передвигать указатель
+        // передвигать указатель
+        //
+        //size=myfile.tellp();
+        myfile.close();
+    }
+    else{
+        qDebug()<<"opening to write error";
+    }
+}
+
+void MainWindow::update_save_data()
+{
+    std::ofstream myfile("datafile.dat",std::ios::out|std::ios::binary|std::ios::ate);
+    if(myfile.is_open()){
+
+        for(unsigned int i = 0;i<time_element.size();i++){
+         myfile.write((char*)&(time_element[i]),sizeof(time_element[i]));
+         myfile.seekp(sizeof(time_element[i], myfile.cur));
+        }
+        // каждый раз пока не конец файла записывать
+        // считывать и передвигать указатель
+        // передвигать указатель
+        //
+        //size=myfile.tellp();
+        myfile.close();
+    }
+    else{
+        qDebug()<<"opening to write error";
+    }
+}
+
+void MainWindow::load_data()
+{
+    timer_alarm_element _temp;
+    time_element.clear();
+    std::ifstream myfile("datafile.dat",std::ios::in|std::ios::binary);
+    if(myfile.is_open()){
+        while(!myfile.eof()){
+            myfile.read((char*)&_temp,sizeof(_temp));
+            time_element.push_back(_temp);
+            myfile.seekg(sizeof(_temp),myfile.cur);
+       }
+        myfile.close();
+    }
+    else{
+        qDebug()<<"opening to read error";
+    }
+
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    QMessageBox::StandardButton resBtn = QMessageBox::question( this, "Timers",
+                                                                    tr("Are you sure?\n"),
+                                                                    QMessageBox::Cancel | QMessageBox::Yes);
+        if (resBtn == QMessageBox::Yes) {
+            save_data();
+            event->accept();
+        } else {
+            event->ignore();
+        }
 }

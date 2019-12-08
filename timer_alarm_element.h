@@ -4,6 +4,7 @@
 #include <QObject>
 #include <vector>
 #include <QFileDialog>
+#include <QDataStream>
 
 class timer_alarm_element
 {
@@ -16,7 +17,7 @@ private:
 
 public:
 
-
+    timer_alarm_element();
     timer_alarm_element(int time,bool is_timer,QUrl Audio_path);
     timer_alarm_element(const timer_alarm_element &obj);
     void Set_time_in_miliseconds(int time_in_miliseconds);
@@ -31,6 +32,19 @@ public:
     bool is_timer() const;
     QUrl audio_path() const;
     QString icon_path() const;
+
+    /* overload the operators */
+        friend QDataStream &operator<< (QDataStream &out, const timer_alarm_element &rhs)
+        {
+            out << rhs._is_active << rhs._is_timer << rhs._icon_path << rhs._audio_path << rhs._time_in_miliseconds ;
+            return out;
+        }
+
+        friend QDataStream &operator>> (QDataStream &in, timer_alarm_element &rhs)
+        {
+            in >> rhs._is_active >> rhs._is_timer >> rhs._icon_path >> rhs._audio_path >> rhs._time_in_miliseconds;
+            return in;
+        }
 
 
 

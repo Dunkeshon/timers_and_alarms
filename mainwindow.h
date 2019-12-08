@@ -5,6 +5,7 @@
 #include "timer_alarm_element.h"
 #include <vector>
 #include <QFileDialog>
+#include <QCloseEvent>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -39,6 +40,14 @@ private slots:
     void updating_time_of_timers(); // updating time every second in started timers
 
     void on_choose_sound_clicked();
+
+    void save_data();
+
+    void update_save_data();
+
+    void load_data();
+
+    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::MainWindow *ui;
