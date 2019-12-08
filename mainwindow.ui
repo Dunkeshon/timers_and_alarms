@@ -127,7 +127,7 @@ QListView::item:hover {
           <set>Qt::AlignCenter</set>
          </property>
          <property name="currentSection">
-          <enum>QDateTimeEdit::SecondSection</enum>
+          <enum>QDateTimeEdit::HourSection</enum>
          </property>
          <property name="displayFormat">
           <string>HH:mm:ss</string>
