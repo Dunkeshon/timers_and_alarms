@@ -107,14 +107,16 @@ void MainWindow::countdown()
 
         element->Set_is_active(false);
         ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
-        if(ui->dont_disturb_check->isTristate()){
-            if((QTime::currentTime().msecsSinceStartOfDay()>do_not_distorb_from)&&
+        qDebug()<<do_not_distorb_from<< "do_not_distorb_from" ;
+        qDebug()<<do_not_distorb_to<< "do_not_distorb_to" ;
+        qDebug()<<QTime::currentTime().msecsSinceStartOfDay()<<"currentTime";
+        if((ui->dont_disturb_check->isTristate())&&
+            (QTime::currentTime().msecsSinceStartOfDay()>do_not_distorb_from)&&
                     (QTime::currentTime().msecsSinceStartOfDay()<do_not_distorb_to)){
                     delete player;
                    // ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
-            }
         }
-        else if(!ui->dont_disturb_check->isTristate()){
+        else{
         player->play();
 
         QMessageBox ::warning(this,message,
