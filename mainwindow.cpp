@@ -21,8 +21,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this,&MainWindow::start_countdown,this,&MainWindow::countdown);
     connect(update_timer,&QTimer::timeout,this,&MainWindow::updating_time_of_timers );
     connect(this,&MainWindow::do_not_disturb_changed,this,&MainWindow::change_ui_disturb);
+    connect(this,&MainWindow::group_created,[=](){
+        mygroups.push_back(current_group);
+        update_current_group_name();
+    });
     update_timer->start(1000);
-
+    ui->group_edit->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -110,10 +114,6 @@ void MainWindow::countdown()
                  player->stop();
                  delete player;
             }
-
-
-        //ПЕРЕМЕННАЯ ТИПА ЦВЕТ(стринг сначала сохранить а потом его возобновить)
-       // ui->listWidget->item(list_index)->backgroundColor() = QWidget::palette().color(QWidget::backgroundRole());
         ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
        }
     });
@@ -254,4 +254,59 @@ void MainWindow::on_actionhh_mm_triggered()
 void MainWindow::on_actionhh_mm_ss_triggered()
 {
     display_format="hh:mm:ss";
+}
+
+void MainWindow::update_current_group_name()
+{
+    ui->group_edit->setText(current_group);
+    ui->group_edit->setEnabled(false);
+}
+
+void MainWindow::on_actionCreate_group_triggered()
+{
+    GroupDialog *groupWindow = new GroupDialog(this);
+    groupWindow->show();
+}
+
+void MainWindow::on_actionAvailable_groups_triggered()
+{
+    // диалоговое окно с листвиджетом из груп
+}
+
+void MainWindow::on_Change_group_clicked()
+{
+    if(ui->Change_group->text()=="Change group"){
+        ui->group_edit->setEnabled(true);
+        ui->Change_group->setText("Confirm group");
+        ui->Change_group->setDown(true);
+    }
+    else if(ui->Change_group->text()=="Confirm group"){
+        bool found = false;
+        //qDebug()<<mygroups.size() << " size";
+        for(unsigned long int it = 0;it<mygroups.size();it++){
+             //qDebug()<<mygroups[it] << " string at index "<< it;
+             //qDebug()<<ui->group_edit->text()<<" string to comare ";
+            if (mygroups[it]==ui->group_edit->text())
+            {
+               // qDebug()<<mygroups[it] <<"Success";
+                found=true;
+            }
+        }
+        if(found==false){
+        QMessageBox::StandardButton Btn = QMessageBox::warning( this, "No such group",
+                                                                        "<p align=center> There is no group with that name <p>"
+                                                                           "<br> Press OK to create this group",
+
+                                                                        QMessageBox::Cancel | QMessageBox::Yes);
+            if (Btn == QMessageBox::Yes) {
+                current_group = ui->group_edit->text();
+                emit(group_created());
+            } else {
+                ui->group_edit->setText(current_group);
+            }
+        }
+        ui->group_edit->setEnabled(false);
+        ui->Change_group->setText("Change group");
+        ui->Change_group->setDown(false);
+    }
 }

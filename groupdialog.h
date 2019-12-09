@@ -15,6 +15,11 @@ public:
     explicit GroupDialog(QWidget *parent = nullptr);
     ~GroupDialog();
 
+private slots:
+    void on_OK_clicked();
+
+    void on_Cancel_clicked();
+
 private:
     Ui::GroupDialog *ui;
 };

@@ -21,6 +21,7 @@ public:
     int do_not_distorb_from;
     int do_not_distorb_to;
     QString display_format;
+    QString current_group;
     std::vector<QString> mygroups;
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -28,6 +29,7 @@ signals:
     void new_element_created(); // created in edit window
     void start_countdown(); // pressed on start button
     void do_not_disturb_changed();
+    void group_created(); // before using you must set current_group
 private slots:
 
     void on_actionTimer_triggered(); // add timer
@@ -63,6 +65,14 @@ private slots:
     void on_actionhh_mm_triggered();
 
     void on_actionhh_mm_ss_triggered();
+
+    void update_current_group_name();
+
+    void on_actionCreate_group_triggered();
+
+    void on_actionAvailable_groups_triggered();
+
+    void on_Change_group_clicked();
 
 private:
     Ui::MainWindow *ui;
