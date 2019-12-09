@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     display_format = "hh:mm:ss";
     ui->TimeSelection->setDisplayFormat(display_format);
+    QCheckBox *check = ui->dont_disturb_check;
     QTimer *update_timer = new QTimer(this);
     ui->container->setEnabled(false); // true also when changed
     changed = false;
@@ -25,8 +26,16 @@ MainWindow::MainWindow(QWidget *parent)
         mygroups.push_back(current_group);
         update_current_group_name();
     });
+    connect(check,&QCheckBox::stateChanged,[=]{
+        QTimer *timer = new QTimer;
+        check->setEnabled(false);
+        timer->singleShot( 2000, this ,[=](){
+            check->setEnabled(true);
+        });
+    });
     update_timer->start(1000);
     ui->group_edit->setEnabled(false);
+    ui->dont_disturb_check->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -97,11 +106,12 @@ void MainWindow::countdown()
     timer->singleShot( time_to_count, this ,[=](){
 
         element->Set_is_active(false);
+        ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
         if(ui->dont_disturb_check->isTristate()){
             if((QTime::currentTime().msecsSinceStartOfDay()>do_not_distorb_from)&&
                     (QTime::currentTime().msecsSinceStartOfDay()<do_not_distorb_to)){
                     delete player;
-                    ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
+                   // ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
             }
         }
         else if(!ui->dont_disturb_check->isTristate()){
@@ -154,10 +164,12 @@ void MainWindow::adding_to_list()
  */
 void MainWindow::on_pushButton_2_clicked()
 {
+    if(time_element.size()==0){
+        return;
+    }
     int _el_to_delete = ui->listWidget->currentRow();
     time_element.erase(time_element.begin()+_el_to_delete);
     ui->listWidget->takeItem(ui->listWidget->currentRow());
-
 
 }
 /*
@@ -165,6 +177,9 @@ void MainWindow::on_pushButton_2_clicked()
  */
 void MainWindow::on_startbutton_pressed()
 {
+    if(time_element.size()==0){
+        return;
+    }
     if(time_element[ui->listWidget->currentRow()].is_active()==false){
         emit(start_countdown());
     }
@@ -226,6 +241,7 @@ void MainWindow::on_actionset_change_don_t_disturb_time_triggered()
 void MainWindow::change_ui_disturb()
 {
     ui->from_to_dont_disturb->setText(QTime(0,0,0).addMSecs(do_not_distorb_from).toString(display_format) +" - "+QTime(0,0,0).addMSecs(do_not_distorb_to).toString(display_format));
+    ui->dont_disturb_check->setEnabled(true);
 }
 
 
@@ -270,9 +286,25 @@ void MainWindow::on_actionCreate_group_triggered()
 
 void MainWindow::on_actionAvailable_groups_triggered()
 {
-    // диалоговое окно с листвиджетом из груп
+     QFont newFont("Courier", 24, QFont::Bold, false);
+     QDialog *window = new QDialog(this);
+     QListWidget *list = new QListWidget;
+     list->setFont(newFont);
+     QPushButton *OkButton = new QPushButton;
+     OkButton->setText("OK");
+     OkButton->setFont(newFont);
+     QGridLayout *layout= new QGridLayout;
+     layout->addWidget(list,0,0);
+     layout->addWidget(OkButton,1,0);
+     for(unsigned long i = 0;i<mygroups.size();i++ ){
+         list->addItem(mygroups[i]);
+     }
+     connect(OkButton,&QPushButton::clicked,[=](){
+         window->hide();
+     });
+     window->setLayout(layout);
+     window->show();
 }
-
 void MainWindow::on_Change_group_clicked()
 {
     if(ui->Change_group->text()=="Change group"){
@@ -282,13 +314,9 @@ void MainWindow::on_Change_group_clicked()
     }
     else if(ui->Change_group->text()=="Confirm group"){
         bool found = false;
-        //qDebug()<<mygroups.size() << " size";
         for(unsigned long int it = 0;it<mygroups.size();it++){
-             //qDebug()<<mygroups[it] << " string at index "<< it;
-             //qDebug()<<ui->group_edit->text()<<" string to comare ";
             if (mygroups[it]==ui->group_edit->text())
             {
-               // qDebug()<<mygroups[it] <<"Success";
                 found=true;
             }
         }
@@ -301,7 +329,8 @@ void MainWindow::on_Change_group_clicked()
             if (Btn == QMessageBox::Yes) {
                 current_group = ui->group_edit->text();
                 emit(group_created());
-            } else {
+            }
+            else {
                 ui->group_edit->setText(current_group);
             }
         }
@@ -309,4 +338,16 @@ void MainWindow::on_Change_group_clicked()
         ui->Change_group->setText("Change group");
         ui->Change_group->setDown(false);
     }
+}
+
+
+
+void MainWindow::on_Add_to_group_clicked()
+{
+    if(time_element.size()==0){
+       return;
+    }
+   int index = ui->listWidget->currentRow();
+   time_element[index].Set_group(current_group);
+   qDebug()<<time_element[index].group();
 }

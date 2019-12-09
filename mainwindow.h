@@ -74,6 +74,8 @@ private slots:
 
     void on_Change_group_clicked();
 
+    void on_Add_to_group_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::vector<timer_alarm_element> time_element;  // stores info about timer/alarm

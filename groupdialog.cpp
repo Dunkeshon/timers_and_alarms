@@ -17,10 +17,17 @@ void GroupDialog::on_OK_clicked()
 {
     MainWindow * temp = qobject_cast <MainWindow *>(parent());
     if(ui->lineEdit->text()!=""){
-        temp->current_group = ui->lineEdit->text();
-        emit(temp->group_created());
+        if(temp->mygroups.size()!=0){
+            for(unsigned int i =0;i<temp->mygroups.size();i++){
+                if(temp->mygroups[i]==ui->lineEdit->text()){
+                    hide();
+                    return;
+                }
+            }
+        }
+            temp->current_group = ui->lineEdit->text();
+            emit(temp->group_created());
     }
-
     hide();
 }
 
