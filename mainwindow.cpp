@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
     QCheckBox *check = ui->dont_disturb_check;
     QTimer *update_timer = new QTimer(this);
     ui->container->setEnabled(false); // true also when changed
+    ui->startbutton->setEnabled(false);
+    ui->delete_button->setEnabled(false);
+
     changed = false;
     connect(this,&MainWindow::new_element_created,this,&MainWindow::adding_to_list);
     connect(this,&MainWindow::start_countdown,this,&MainWindow::countdown);
@@ -29,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(check,&QCheckBox::stateChanged,[=]{
         QTimer *timer = new QTimer;
         check->setEnabled(false);
-        timer->singleShot( 2000, this ,[=](){
+        timer->singleShot( 500, this ,[=](){
             check->setEnabled(true);
         });
     });
@@ -164,12 +167,15 @@ void MainWindow::adding_to_list()
  * PLANS : maybe it's a good idea to have dialog window
  * that asks if i want to delete for sure
  */
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_delete_button_clicked()
 {
     if(time_element.size()==0){
         return;
     }
     int _el_to_delete = ui->listWidget->currentRow();
+    if(time_element[ui->listWidget->currentRow()].is_active()){
+        return;
+    }
     time_element.erase(time_element.begin()+_el_to_delete);
     ui->listWidget->takeItem(ui->listWidget->currentRow());
 
@@ -353,3 +359,10 @@ void MainWindow::on_Add_to_group_clicked()
    time_element[index].Set_group(current_group);
    qDebug()<<time_element[index].group();
 }
+
+void MainWindow::on_listWidget_itemSelectionChanged()
+{
+    ui->startbutton->setEnabled(true);
+    ui->delete_button->setEnabled(true);
+}
+

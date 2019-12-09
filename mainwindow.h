@@ -42,7 +42,7 @@ private slots:
 
     void adding_to_list();// create timer/alarm,add it to vector of timers and add it to ui list
 
-    void on_pushButton_2_clicked();
+    void on_delete_button_clicked();
 
     void on_startbutton_pressed();
 
@@ -75,6 +75,8 @@ private slots:
     void on_Change_group_clicked();
 
     void on_Add_to_group_clicked();
+
+    void on_listWidget_itemSelectionChanged();
 
 private:
     Ui::MainWindow *ui;

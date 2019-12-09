@@ -58,7 +58,7 @@ QListView::item:hover {
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="delete_button">
           <property name="text">
            <string>Delete</string>
           </property>
