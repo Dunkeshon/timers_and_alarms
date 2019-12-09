@@ -50,6 +50,11 @@ void timer_alarm_element::Set_icon_path(QString icon_path)
     _icon_path=icon_path;
 }
 
+void timer_alarm_element::Set_group(QString group)
+{
+    _group=group;
+}
+
 void timer_alarm_element::Set_is_active(bool active)
 {
     _is_active=active;
@@ -74,6 +79,11 @@ QUrl timer_alarm_element::audio_path() const
 QString timer_alarm_element::icon_path() const
 {
     return _icon_path;
+}
+
+QString timer_alarm_element::group() const
+{
+    return _group;
 }
 
 

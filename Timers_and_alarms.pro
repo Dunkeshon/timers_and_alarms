@@ -17,17 +17,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     donotdisturb.cpp \
+    groupdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     timer_alarm_element.cpp
 
 HEADERS += \
     donotdisturb.h \
+    groupdialog.h \
     mainwindow.h \
     timer_alarm_element.h
 
 FORMS += \
     donotdisturb.ui \
+    groupdialog.ui \
     mainwindow.ui
 
 # Default rules for deployment.

@@ -8,6 +8,7 @@
 #include <QCloseEvent>
 #include "donotdisturb.h"
 #include <QString>
+#include "groupdialog.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -20,6 +21,7 @@ public:
     int do_not_distorb_from;
     int do_not_distorb_to;
     QString display_format;
+    std::vector<QString> mygroups;
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 signals:

@@ -14,6 +14,7 @@ private:
      bool _is_timer;
      QUrl _audio_path;
      QString _icon_path;
+     QString _group;
 
 public:
 
@@ -25,6 +26,7 @@ public:
     void Set_is_timer(bool is_timer);
     void Set_audio_path(QString audio_path);
     void Set_icon_path(QString icon_path );
+    void Set_group(QString group);
 
     int time_in_miliseconds() const;
     int time_left_in_ms() const;
@@ -32,6 +34,7 @@ public:
     bool is_timer() const;
     QUrl audio_path() const;
     QString icon_path() const;
+    QString group() const;
 
     /* overload the operators */
         friend QDataStream &operator<< (QDataStream &out, const timer_alarm_element &rhs)

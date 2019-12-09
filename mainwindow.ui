@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>654</width>
-    <height>497</height>
+    <width>584</width>
+    <height>516</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0" rowspan="3">
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
        <widget class="QListWidget" name="listWidget">
         <property name="styleSheet">
          <string notr="true">QListView::item:alternate {
@@ -48,7 +48,7 @@ QListView::item:hover {
         </property>
        </widget>
       </item>
-      <item>
+      <item row="1" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QPushButton" name="startbutton">
@@ -167,18 +167,21 @@ QListView::item:hover {
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Minimum</enum>
+      </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>20</width>
-        <height>50</height>
+        <width>17</width>
+        <height>30</height>
        </size>
       </property>
      </spacer>
     </item>
     <item row="2" column="1">
      <widget class="QWidget" name="widget" native="true">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="2" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QCheckBox" name="dont_disturb_check">
@@ -199,6 +202,74 @@ QListView::item:hover {
          </item>
         </layout>
        </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QPushButton" name="Add_to_group">
+             <property name="text">
+              <string>Add to group</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="Start_group">
+             <property name="text">
+              <string>Start group</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QPushButton" name="Delete_from_group">
+             <property name="text">
+              <string>Delete from group</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="Change_group">
+             <property name="text">
+              <string>Change group</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>13</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Group name :</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="group_edit"/>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
     </item>
@@ -209,7 +280,7 @@ QListView::item:hover {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>654</width>
+     <width>584</width>
      <height>22</height>
     </rect>
    </property>
@@ -241,9 +312,16 @@ QListView::item:hover {
     </widget>
     <addaction name="menutime_format"/>
    </widget>
+   <widget class="QMenu" name="menuGroup">
+    <property name="title">
+     <string>Group</string>
+    </property>
+    <addaction name="actionCreate_group"/>
+   </widget>
    <addaction name="menuAdd"/>
    <addaction name="menuDo_not_disturb"/>
    <addaction name="menuSettings"/>
+   <addaction name="menuGroup"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actiondo_not_disturb_time">
@@ -289,6 +367,11 @@ QListView::item:hover {
   <action name="actionhh_mm_Am_Pm">
    <property name="text">
     <string>hh:mm    Am /Pm</string>
+   </property>
+  </action>
+  <action name="actionCreate_group">
+   <property name="text">
+    <string>Create group</string>
    </property>
   </action>
  </widget>
