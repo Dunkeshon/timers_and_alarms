@@ -27,7 +27,7 @@ public:
     ~MainWindow();
 signals:
     void new_element_created(); // created in edit window
-    void start_countdown(); // pressed on start button
+    //void start_countdown(); // pressed on start button
     void do_not_disturb_changed();
     void group_created(); // before using you must set current_group
 private slots:
@@ -38,7 +38,7 @@ private slots:
 
     void on_confirm_button_clicked(); // confirm adding
 
-    void countdown(); //starting countdown of a timer
+    void countdown(int list_index); //starting countdown of a timer
 
     void adding_to_list();// create timer/alarm,add it to vector of timers and add it to ui list
 
@@ -77,6 +77,10 @@ private slots:
     void on_Add_to_group_clicked();
 
     void on_listWidget_itemSelectionChanged();
+
+    void on_Start_group_clicked();
+
+    void on_Delete_from_group_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -11,6 +11,7 @@ timer_alarm_element::timer_alarm_element(int time,bool is_timer,QUrl Audio_path)
     _is_timer=is_timer;
     _audio_path=Audio_path;
     _is_active = false;
+    _group= "not_setted";
     if(is_timer){
         _icon_path =":/images/timer_icon_blue.png";
     }
@@ -27,6 +28,7 @@ timer_alarm_element::timer_alarm_element(const timer_alarm_element & obj)
     _is_active=obj._is_active;
     _audio_path=obj._audio_path;
     _icon_path=obj._icon_path;
+    _group=obj._group;
 }
 
 void timer_alarm_element::Set_time_in_miliseconds(int time_in_miliseconds)

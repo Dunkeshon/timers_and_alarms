@@ -22,14 +22,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     changed = false;
     connect(this,&MainWindow::new_element_created,this,&MainWindow::adding_to_list);
-    connect(this,&MainWindow::start_countdown,this,&MainWindow::countdown);
+    //connect(this,&MainWindow::start_countdown,this,&MainWindow::countdown);
     connect(update_timer,&QTimer::timeout,this,&MainWindow::updating_time_of_timers );
     connect(this,&MainWindow::do_not_disturb_changed,this,&MainWindow::change_ui_disturb);
     connect(this,&MainWindow::group_created,[=](){
         mygroups.push_back(current_group);
         update_current_group_name();
     });
-    connect(check,&QCheckBox::stateChanged,[=]{
+    connect(check,&QCheckBox::stateChanged,[=](){
         QTimer *timer = new QTimer;
         check->setEnabled(false);
         timer->singleShot( 500, this ,[=](){
@@ -78,13 +78,13 @@ void MainWindow::on_confirm_button_clicked()
  * brief Starts countdown of timer or an alarm
  * details If it is an alarm clock - countdown miliseconds of alarm - miliseconds of current time
  */
-void MainWindow::countdown()
+void MainWindow::countdown(int list_index)
 {
     QMediaPlayer *player = new QMediaPlayer;
     int time_to_count;
     QString message;
     QTimer *timer = new QTimer(this);
-    int list_index = ui->listWidget->currentRow();
+   // int list_index = ui->listWidget->currentRow();
     timer_alarm_element *element = &time_element[list_index];
 
     element->Set_is_active(true);
@@ -110,9 +110,6 @@ void MainWindow::countdown()
 
         element->Set_is_active(false);
         ui->listWidget->item(list_index)->setText(QTime(0,0,0).addMSecs(element->time_in_miliseconds()).toString(display_format));
-        qDebug()<<do_not_distorb_from<< "do_not_distorb_from" ;
-        qDebug()<<do_not_distorb_to<< "do_not_distorb_to" ;
-        qDebug()<<QTime::currentTime().msecsSinceStartOfDay()<<"currentTime";
         if((ui->dont_disturb_check->isTristate())&&
             (QTime::currentTime().msecsSinceStartOfDay()>do_not_distorb_from)&&
                     (QTime::currentTime().msecsSinceStartOfDay()<do_not_distorb_to)){
@@ -189,7 +186,7 @@ void MainWindow::on_startbutton_pressed()
         return;
     }
     if(time_element[ui->listWidget->currentRow()].is_active()==false){
-        emit(start_countdown());
+        countdown(ui->listWidget->currentRow());
     }
 }
 
@@ -322,7 +319,8 @@ void MainWindow::on_Change_group_clicked()
     }
     else if(ui->Change_group->text()=="Confirm group"){
         bool found = false;
-        for(unsigned long int it = 0;it<mygroups.size();it++){
+        for(unsigned long int it = 0;it<mygroups.size();it++)
+        {
             if (mygroups[it]==ui->group_edit->text())
             {
                 found=true;
@@ -342,6 +340,7 @@ void MainWindow::on_Change_group_clicked()
                 ui->group_edit->setText(current_group);
             }
         }
+        current_group=ui->group_edit->text();
         ui->group_edit->setEnabled(false);
         ui->Change_group->setText("Change group");
         ui->Change_group->setDown(false);
@@ -366,3 +365,22 @@ void MainWindow::on_listWidget_itemSelectionChanged()
     ui->delete_button->setEnabled(true);
 }
 
+void MainWindow::on_Start_group_clicked()
+{
+    if(time_element.size()==0){
+        return;
+    }
+    for(unsigned long int i = 0;i<time_element.size();i++){
+        if(time_element[i].group()==current_group){
+            qDebug()<<time_element[i].group()<<"group of"<<i;
+            if(time_element[i].is_active()==false){
+                countdown(i);
+            }
+        }
+    }
+}
+
+void MainWindow::on_Delete_from_group_clicked()
+{
+    time_element[ui->listWidget->currentRow()].Set_group("not_setted");
+}
