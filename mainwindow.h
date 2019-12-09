@@ -82,6 +82,9 @@ private slots:
 
     void on_Delete_from_group_clicked();
 
+
+    void on_timers_in_group_clicked();
+
 private:
     Ui::MainWindow *ui;
     std::vector<timer_alarm_element> time_element;  // stores info about timer/alarm

@@ -298,9 +298,16 @@ void MainWindow::on_actionAvailable_groups_triggered()
      QPushButton *OkButton = new QPushButton;
      OkButton->setText("OK");
      OkButton->setFont(newFont);
+     QLabel *label = new QLabel(this);
+     label->setFrameStyle(QFrame::Panel);
+     QString text = "Available groups";
+     label->setText(text);
+     label->setFont(newFont);
+     label->setAlignment(Qt::AlignHCenter);
      QGridLayout *layout= new QGridLayout;
-     layout->addWidget(list,0,0);
-     layout->addWidget(OkButton,1,0);
+     layout->addWidget(label,0,0);
+     layout->addWidget(list,1,0);
+     layout->addWidget(OkButton,2,0);
      for(unsigned long i = 0;i<mygroups.size();i++ ){
          list->addItem(mygroups[i]);
      }
@@ -356,7 +363,6 @@ void MainWindow::on_Add_to_group_clicked()
     }
    int index = ui->listWidget->currentRow();
    time_element[index].Set_group(current_group);
-   qDebug()<<time_element[index].group();
 }
 
 void MainWindow::on_listWidget_itemSelectionChanged()
@@ -383,4 +389,36 @@ void MainWindow::on_Start_group_clicked()
 void MainWindow::on_Delete_from_group_clicked()
 {
     time_element[ui->listWidget->currentRow()].Set_group("not_setted");
+}
+
+
+void MainWindow::on_timers_in_group_clicked()
+{
+    QFont newFont("Courier", 24, QFont::Bold, false);
+    QDialog *window = new QDialog(this);
+    QListWidget *list = new QListWidget;
+    list->setFont(newFont);
+    QPushButton *OkButton = new QPushButton;
+    OkButton->setText("OK");
+    OkButton->setFont(newFont);
+    QLabel *label = new QLabel(this);
+    label->setFrameStyle(QFrame::Panel);
+    QString text = "Timers in group '" + current_group + "'";
+    label->setText(text);
+    label->setFont(newFont);
+    label->setAlignment(Qt::AlignHCenter);
+    QGridLayout *layout= new QGridLayout;
+    layout->addWidget(label,0,0);
+    layout->addWidget(list,1,0);
+    layout->addWidget(OkButton,2,0);
+    for(unsigned long i = 0;i<time_element.size();i++ ){
+        if(time_element[i].group()==current_group){
+            list->addItem((QTime(0,0,0).addMSecs(time_element[i].time_in_miliseconds()).toString(display_format)));
+        }
+    }
+    connect(OkButton,&QPushButton::clicked,[=](){
+        window->hide();
+    });
+    window->setLayout(layout);
+    window->show();
 }

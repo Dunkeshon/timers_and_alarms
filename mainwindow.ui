@@ -232,7 +232,7 @@ QListView::item:hover {
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="timers_in_group">
              <property name="text">
               <string>Timers in group</string>
              </property>
