@@ -447,7 +447,7 @@ void MainWindow::check_and_show_advice()
        layout->addWidget(list,1,0);
        layout->addWidget(OkButton,2,0);
        for(unsigned long i = 0;i<time_element.size();i++ ){
-           if(time_element[i].group()==current_group){
+           if(time_element[i].group()==time_element[ui->listWidget->currentRow()].group()){
                list->addItem((QTime(0,0,0).addMSecs(time_element[i].time_in_miliseconds()).toString(display_format)));
            }
        }
