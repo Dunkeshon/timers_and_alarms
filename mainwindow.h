@@ -85,11 +85,18 @@ private slots:
 
     void on_timers_in_group_clicked();
 
+    void on_actionstarting_advice_triggered(bool checked);
+
+    void check_and_show_advice();
+
+    void start_group_timers(QString group,std::vector<timer_alarm_element> cur_vector);
+
 private:
     Ui::MainWindow *ui;
     std::vector<timer_alarm_element> time_element;  // stores info about timer/alarm
     bool changed;
     QUrl _temp_adress_of_audio;
     DoNotDisturb *child;
+    bool advices;
 };
 #endif // MAINWINDOW_H

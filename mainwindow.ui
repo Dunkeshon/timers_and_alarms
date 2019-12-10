@@ -324,6 +324,7 @@ QListView::item:hover {
      <addaction name="actionhh_mm_Am_Pm"/>
     </widget>
     <addaction name="menutime_format"/>
+    <addaction name="actionstarting_advice"/>
    </widget>
    <widget class="QMenu" name="menuGroup">
     <property name="title">
@@ -391,6 +392,14 @@ QListView::item:hover {
   <action name="actionAvailable_groups">
    <property name="text">
     <string>Available groups</string>
+   </property>
+  </action>
+  <action name="actionstarting_advice">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>starting advice </string>
    </property>
   </action>
  </widget>

@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    advices = false;
     display_format = "hh:mm:ss";
     ui->TimeSelection->setDisplayFormat(display_format);
     QCheckBox *check = ui->dont_disturb_check;
@@ -86,6 +87,10 @@ void MainWindow::countdown(int list_index)
     QTimer *timer = new QTimer(this);
    // int list_index = ui->listWidget->currentRow();
     timer_alarm_element *element = &time_element[list_index];
+
+    if(advices){
+
+    }
 
     element->Set_is_active(true);
 
@@ -185,6 +190,9 @@ void MainWindow::on_startbutton_pressed()
     if(time_element.size()==0){
         return;
     }
+    if(advices){
+        check_and_show_advice();
+    }
     if(time_element[ui->listWidget->currentRow()].is_active()==false){
         countdown(ui->listWidget->currentRow());
     }
@@ -214,7 +222,7 @@ void MainWindow::updating_time_of_timers()
 void MainWindow::on_choose_sound_clicked()
 {
     QFileDialog dialog;
-    dialog.setDirectory(":/sounds/music/");
+    dialog.setDirectory("qrc:/sounds/music/");
     _temp_adress_of_audio = dialog.getOpenFileUrl(this,
                                                   "Choose Audio",
                                                   QUrl("qrc:/sounds/music/"),
@@ -373,17 +381,7 @@ void MainWindow::on_listWidget_itemSelectionChanged()
 
 void MainWindow::on_Start_group_clicked()
 {
-    if(time_element.size()==0){
-        return;
-    }
-    for(unsigned long int i = 0;i<time_element.size();i++){
-        if(time_element[i].group()==current_group){
-            qDebug()<<time_element[i].group()<<"group of"<<i;
-            if(time_element[i].is_active()==false){
-                countdown(i);
-            }
-        }
-    }
+    start_group_timers(current_group,time_element);
 }
 
 void MainWindow::on_Delete_from_group_clicked()
@@ -422,3 +420,57 @@ void MainWindow::on_timers_in_group_clicked()
     window->setLayout(layout);
     window->show();
 }
+
+void MainWindow::on_actionstarting_advice_triggered(bool checked)
+{
+    advices = checked;
+}
+
+void MainWindow::check_and_show_advice()
+{
+   if(advices && time_element[ui->listWidget->currentRow()].group()!="not_setted"){
+       QFont newFont("Courier", 24, QFont::Bold, false);
+       QDialog *window = new QDialog(this);
+       QListWidget *list = new QListWidget;
+       list->setFont(newFont);
+       QPushButton *OkButton = new QPushButton;
+       OkButton->setText("OK");
+       OkButton->setFont(newFont);
+       QLabel *label = new QLabel(this);
+       label->setFrameStyle(QFrame::Panel);
+       QString text = "Advice: set those timers";
+       label->setText(text);
+       label->setFont(newFont);
+       label->setAlignment(Qt::AlignHCenter);
+       QGridLayout *layout= new QGridLayout;
+       layout->addWidget(label,0,0);
+       layout->addWidget(list,1,0);
+       layout->addWidget(OkButton,2,0);
+       for(unsigned long i = 0;i<time_element.size();i++ ){
+           if(time_element[i].group()==current_group){
+               list->addItem((QTime(0,0,0).addMSecs(time_element[i].time_in_miliseconds()).toString(display_format)));
+           }
+       }
+       connect(OkButton,&QPushButton::clicked,[=](){
+           window->hide();
+       });
+       window->setLayout(layout);
+       window->show();
+   }
+}
+
+void MainWindow::start_group_timers(QString group,std::vector<timer_alarm_element> cur_vector)
+{
+    if(cur_vector.size()==0){
+        return;
+    }
+    for(unsigned long int i = 0;i<cur_vector.size();i++){
+        if(cur_vector[i].group()==group){
+            if(cur_vector[i].is_active()==false){
+                countdown(i);
+            }
+        }
+    }
+}
+
+
